@@ -3,11 +3,11 @@ package com.example.bankingassignment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication()
 public class BankingAssignmentApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BankingAssignmentApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BankingAssignmentApplication.class, args);
+    }
 
 }
