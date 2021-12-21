@@ -2,6 +2,7 @@ package com.example.bankingassignment.controller;
 
 import com.example.bankingassignment.dto.JwtAuthenticationRequest;
 import com.example.bankingassignment.dto.JwtAuthenticationResponse;
+import com.example.bankingassignment.dto.UserDto;
 import com.example.bankingassignment.services.MyUserDetailsService;
 import com.example.bankingassignment.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class JwtAuthenticationController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),  authenticationRequest.getPassword()));
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password");
         }
@@ -48,6 +49,11 @@ public class JwtAuthenticationController {
 
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
 
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) throws Exception {
+        return ResponseEntity.ok(myUserDetailsService.save(userDto));
     }
 
 }
