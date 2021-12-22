@@ -18,9 +18,6 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder bcryptEncoder;
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,12 +31,8 @@ public class MyUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), new ArrayList<>());
     }
 
-    public User save(UserDto user) {
-        User newUser = new User();
-        newUser.setFirstname(user.getFirstname());
-        newUser.setLastname(user.getLastname());
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        return userRepository.save(newUser);
+    public User saveUser(User user) {
+
+        return userRepository.save(user);
     }
 }

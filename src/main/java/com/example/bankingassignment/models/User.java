@@ -22,6 +22,28 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Account account;
+
+    public User(String firstname, String lastname, String username, String password, Account account) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+        this.account = account;
+    }
+
+    public User() {
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     public String getFirstname() {
         return firstname;
     }

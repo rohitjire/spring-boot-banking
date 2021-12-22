@@ -3,6 +3,9 @@ package com.example.bankingassignment.controller;
 import com.example.bankingassignment.dto.JwtAuthenticationRequest;
 import com.example.bankingassignment.dto.JwtAuthenticationResponse;
 import com.example.bankingassignment.dto.UserDto;
+import com.example.bankingassignment.models.Account;
+import com.example.bankingassignment.models.User;
+import com.example.bankingassignment.services.AccountService;
 import com.example.bankingassignment.services.MyUserDetailsService;
 import com.example.bankingassignment.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +31,13 @@ public class JwtAuthenticationController {
     private MyUserDetailsService myUserDetailsService;
 
     @Autowired
+    private AccountService accountService;
+
+    @Autowired
     private JwtUtil jwtTokenUtil;
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
+
 
     @RequestMapping("/hello")
     public String hello() {
@@ -53,7 +63,8 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) throws Exception {
-        return ResponseEntity.ok(myUserDetailsService.save(userDto));
+        Account account = accountService.createAccount(new Account());
+        User user = myUserDetailsService.saveUser(new User(userDto.getFirstname(), userDto.getLastname(), userDto.getUsername(), bcryptEncoder.encode(userDto.getPassword()), account));
+        return ResponseEntity.ok(myUserDetailsService.saveUser(user));
     }
-
 }
