@@ -1,5 +1,7 @@
 package com.example.bankingassignment.controller;
 
+import com.example.bankingassignment.dto.AccountDto;
+import com.example.bankingassignment.dto.UserDto;
 import com.example.bankingassignment.models.User;
 import com.example.bankingassignment.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,24 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/withdraw", method = RequestMethod.PUT)
-    public ResponseEntity<?> withdrawBalance() {
-        return null;
+    public ResponseEntity<?> withdrawBalance(@RequestBody AccountDto accountDto) {
+
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(username);
+
+        user.getAccount().setBalance(user.getAccount().getBalance() - accountDto.getAmount());
+
+        return ResponseEntity.ok(userRepository.save(user));
     }
 
     @RequestMapping(value = "/deposit", method = RequestMethod.PUT)
-    public ResponseEntity<?> depositBalance() {
-        return null;
+    public ResponseEntity<?> depositBalance(@RequestBody AccountDto accountDto) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(username);
+
+        user.getAccount().setBalance(user.getAccount().getBalance() + accountDto.getAmount());
+
+        return ResponseEntity.ok(userRepository.save(user));
     }
 
 
