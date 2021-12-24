@@ -4,6 +4,7 @@ import com.example.bankingassignment.dto.AccountDto;
 import com.example.bankingassignment.dto.UserDto;
 import com.example.bankingassignment.models.User;
 import com.example.bankingassignment.repo.UserRepository;
+import com.example.bankingassignment.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,11 +19,14 @@ public class AccountController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/balance", method = RequestMethod.GET)
     public ResponseEntity<?> getBalance() {
 
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsername(username);
+        User user = userService.findByUsername(username);
 
         return ResponseEntity.ok().body(user.getAccount().getBalance());
     }
@@ -31,21 +35,21 @@ public class AccountController {
     public ResponseEntity<?> withdrawBalance(@RequestBody AccountDto accountDto) {
 
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsername(username);
+        User user = userService.findByUsername(username);
 
         user.getAccount().setBalance(user.getAccount().getBalance() - accountDto.getAmount());
 
-        return ResponseEntity.ok(userRepository.save(user));
+        return ResponseEntity.ok(userService.saveUser(user));
     }
 
     @RequestMapping(value = "/deposit", method = RequestMethod.PUT)
     public ResponseEntity<?> depositBalance(@RequestBody AccountDto accountDto) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsername(username);
+        User user = userService.findByUsername(username);
 
         user.getAccount().setBalance(user.getAccount().getBalance() + accountDto.getAmount());
 
-        return ResponseEntity.ok(userRepository.save(user));
+        return ResponseEntity.ok(userService.saveUser(user));
     }
 
 
