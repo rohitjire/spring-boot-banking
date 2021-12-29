@@ -17,6 +17,8 @@ public class User {
     @Column
     private String lastname;
     @Column
+    private String emailId;
+    @Column
     private String username;
     @Column
     @JsonIgnore
@@ -25,9 +27,10 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     private Account account;
 
-    public User(String firstname, String lastname, String username, String password, Account account) {
+    public User(String firstname, String lastname,String emailId, String username, String password, Account account) {
         this.firstname = firstname;
         this.lastname = lastname;
+        this.emailId = emailId;
         this.username = username;
         this.password = password;
         this.account = account;
@@ -59,6 +62,10 @@ public class User {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
+
+    public String getEmailId() { return emailId; }
+
+    public void setEmailId(String emailId) { this.emailId = emailId; }
 
     public String getUsername() {
         return username;
