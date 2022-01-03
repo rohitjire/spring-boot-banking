@@ -12,15 +12,15 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
-    @Column
+    @Column(nullable = false)
     private String firstname;
-    @Column
+    @Column(nullable = false)
     private String lastname;
-    @Column
+    @Column(unique = true,nullable = false)
     private String emailId;
-    @Column
+    @Column(unique = true,nullable = false)
     private String username;
-    @Column
+    @Column(nullable = false)
     @JsonIgnore
     private String password;
 

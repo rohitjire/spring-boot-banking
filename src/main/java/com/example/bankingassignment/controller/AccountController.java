@@ -1,9 +1,8 @@
 package com.example.bankingassignment.controller;
 
 import com.example.bankingassignment.dto.AccountDto;
-import com.example.bankingassignment.dto.UserDto;
 import com.example.bankingassignment.models.User;
-import com.example.bankingassignment.repo.UserRepository;
+import com.example.bankingassignment.services.MailService;
 import com.example.bankingassignment.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AccountController {
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MailService mailService;
 
     @RequestMapping(value = "/balance", method = RequestMethod.GET)
     public ResponseEntity<?> getBalance() {
@@ -39,6 +39,14 @@ public class AccountController {
 
         user.getAccount().setBalance(user.getAccount().getBalance() - accountDto.getAmount());
 
+        try {
+            mailService.sendEmail(user.getEmailId(),
+                    "Account Balance Debited",
+                    "Rs."+ accountDto.getAmount() + " debited from your account. Your current balance is Rs." + user.getAccount().getBalance() +".");
+        }catch (Exception e){
+            System.out.println("WITHDRAW CONTROLLER :: "+e);
+        }
+
         return ResponseEntity.ok(userService.saveUser(user));
     }
 
@@ -48,7 +56,13 @@ public class AccountController {
         User user = userService.findByUsername(username);
 
         user.getAccount().setBalance(user.getAccount().getBalance() + accountDto.getAmount());
-
+        try {
+            mailService.sendEmail(user.getEmailId(),
+                    "Account Balance Credited",
+                    "Rs."+ accountDto.getAmount() + " credited to your account. Your current balance is Rs." + user.getAccount().getBalance() +".");
+        }catch (Exception e){
+            System.out.println("DEPOSIT CONTROLLER :: "+e);
+        }
         return ResponseEntity.ok(userService.saveUser(user));
     }
 

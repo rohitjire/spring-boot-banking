@@ -11,6 +11,14 @@ public class Account {
     private long accountId;
     private double balance;
 
+    public Account() {
+    }
+
+    public Account(long accountId, double balance) {
+        this.accountId = accountId;
+        this.balance = balance;
+    }
+
     public long getAccountId() {
         return accountId;
     }

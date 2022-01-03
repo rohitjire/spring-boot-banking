@@ -4,6 +4,7 @@ import com.example.bankingassignment.dto.UserDto;
 import com.example.bankingassignment.models.User;
 import com.example.bankingassignment.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +35,7 @@ public class MyUserDetailsService implements UserDetailsService, UserService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+
 
     @Override
     public User findByUsername(String username) {
